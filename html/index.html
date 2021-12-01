@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sistemas de Recomendación Basados en Contenido</title>  
+    <style type="text/css">
+      #alert {
+        color: rgb(212, 138, 255);
+        margin: 1em 0;
+      }
+    </style> 
+    <meta charset="utf-8">
+    </head>
+  
+  <body>
+    <h1 style="color:rgb(108, 0, 197);">Sistemas de Recomendación Basados en Contenido</h1>
+    <br>
+    <p>Introduzca el fichero (en formato .txt) con los documentos:</p>
+    <input type="file" id="file" name="file" accept=".txt" />
+    <br>
+    <br>
+    <br>
+    <button type="button" id="calcular">Calcular</button> 
+    <output id="print"></output>
+    <br>
+    <br>
+    <p style="color:rgb(108, 0, 197);">Resultados:</p>
+    <div id="output"></div>
+
+    <p style="color:rgb(108, 0, 197);">Similitud:</p>
+    <div id="output2"></div>
+    
+
+    <div id="startpoint"></div>
+    <script type="text/javascript" src="../script/jquery-3.6.0.min.js"></script>    
+    <script type="text/javascript" src="../script/recommendation-system.js"></script>
+  </body>
+</html>
