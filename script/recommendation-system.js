@@ -87,6 +87,26 @@ function calculate(txtArr, stopWordsArr) {
   TFIDF.push(tfIdf(termFrequencies, inverseTermFrequencies[0]));
   console.log(TFIDF);
 
+  let str = "<table>";
+ 
+  str += "<th>Índice del término</th>";
+  str += "<th>Término</th>";
+  str += "<th>TF</th>";
+  str += "<th>IDF</th>";
+  str += "<th>TF-IDF</th></tr>";
+
+
+  for (let i = 0; i < allTerms.length; i++) {
+    str += "<tr>";
+    str += "<th style=\"font-weight:normal\">" + (i + 1) + "</th>";
+    str += "<th style=\"font-weight:normal\">" + allTerms[i] + "</th>";
+    str += "<th style=\"font-weight:normal\">" + "a" + "</th>";
+    str += "<th style=\"font-weight:normal\">" + inverseTermFrequencies[0][i][1].toFixed(5) + "</th>";
+  }
+
+  str += "</table>";
+  document.getElementById("output").innerHTML = str;
+
 }
 
 function TF(allTerms, doc) {
@@ -141,6 +161,38 @@ function tfIdf(tf, idf) {
 }
 
 
-function adjustedCosine() {
+function adjustedCosine(a, b) {
+  let s = [];
+  for (let i = 0; i < a.length; i++) {
+    if ((a[i] !== "-") && (b[i] !== "-")) {
+      s.push(i);
+    }
+  }
   
+  let acc1 = 0;
+  let acc2 = 0;
+  let acc3 = 0;
+
+  for (let i = 0; i < s.length; i++) {
+    acc1 += (a[s[i]] - average(a)) * (b[s[i]] - average(b));
+    acc2 += Math.pow(a[s[i]], 2);
+    acc3 += Math.pow(b[s[i]], 2);
+  }
+
+  acc2 = Math.sqrt(acc2);
+  acc3 = Math.sqrt(acc3);
+
+  return acc1 / (acc2 * acc3);
+}
+
+function average(u) {
+  let acc = 0;
+  let len = 0;
+  for (let i = 0; i < u.length; i++) {
+    if (u[i] !== "-") {
+      acc += Number(u[i]);
+      len++;
+    }
+  }
+  return acc / len;
 }
