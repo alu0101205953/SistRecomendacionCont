@@ -62,7 +62,9 @@ function calculate(txtArr, stopWordsArr) {
       termsPerDoc[i][j] = termsPerDoc[i][j].toLowerCase();
     }
   }
-   
+
+  console.log(termsPerDoc);
+
   for (let i = 0; i < termsPerDoc.length; i++) {
     for (let j = 0; j < termsPerDoc[i].length; j++) {
       if ((allTerms.indexOf(termsPerDoc[i][j]) == -1) && (termsPerDoc[i][j] !== "") && (!stopWordsArr.includes(termsPerDoc[i][j].toLowerCase()))) {
@@ -71,6 +73,8 @@ function calculate(txtArr, stopWordsArr) {
     }
   }
   
+  console.log(allTerms);
+
   let termFrequencies = [];
   let inverseTermFrequencies = [];
   let TFIDF = [];
@@ -82,30 +86,35 @@ function calculate(txtArr, stopWordsArr) {
   inverseTermFrequencies.push(IDF(allTerms, termsPerDoc));
 
   console.log(termFrequencies);
-  console.log(inverseTermFrequencies);
+  //console.log(inverseTermFrequencies);
 
   TFIDF.push(tfIdf(termFrequencies, inverseTermFrequencies[0]));
-  console.log(TFIDF);
+  //console.log(TFIDF);
 
-  let str = "<table>";
+  for (let i = 0; i < txtArr.length; i++) {
+    let str = "<h1>Documento " + (i + 1) + "</h1>";
+    
+    str += "<table>";
  
-  str += "<th>Índice del término</th>";
-  str += "<th>Término</th>";
-  str += "<th>TF</th>";
-  str += "<th>IDF</th>";
-  str += "<th>TF-IDF</th></tr>";
+    str += "<th>Índice del término</th>";
+    str += "<th>Término</th>";
+    str += "<th>TF</th>";
+    str += "<th>IDF</th>";
+    str += "<th>TF-IDF</th></tr>";
 
+    for (let j = 0; j < txtArr[i].length; j++) {
+      if (allTerms[0].includes(txtArr[i][j])) {
+        str += "<tr><th style=\"font-weight:normal\">" + j + "</th>";
 
-  for (let i = 0; i < allTerms.length; i++) {
-    str += "<tr>";
-    str += "<th style=\"font-weight:normal\">" + (i + 1) + "</th>";
-    str += "<th style=\"font-weight:normal\">" + allTerms[i] + "</th>";
-    str += "<th style=\"font-weight:normal\">" + "a" + "</th>";
-    str += "<th style=\"font-weight:normal\">" + inverseTermFrequencies[0][i][1].toFixed(5) + "</th>";
+      }
+    }
+
+    str += "</table>";
+    document.getElementById("output").innerHTML += str;
   }
 
-  str += "</table>";
-  document.getElementById("output").innerHTML = str;
+
+
 
 }
 
@@ -118,9 +127,7 @@ function TF(allTerms, doc) {
     for (let j = 0; j < doc.length; j++) {
       if (allTerms[i] == doc[j]) counter++;
     }
-    if (doc.includes(allTerms[i])) {
-      tf.push([allTerms[i], (counter / doc.length)]);
-    }    
+      tf.push([allTerms[i], (counter / doc.length)]);  
   }
   return tf;
 }
