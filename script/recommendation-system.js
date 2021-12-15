@@ -117,7 +117,30 @@ function calculate(txtArr, stopWordsArr) {
     document.getElementById("output").innerHTML += str;
   }
 
+  let str2 = "<table>";
+  str2 += "<tr><th style= \"width:120px\">/</th>";
+  
+  for (let j = 0; j < txtArr.length; j++) {
+    str2 += "<th style=\"padding-left:20px\"> Documento " + String(j + 1) + "</th>";
+  }
 
+  for (let i = 0; i < TFIDF[0].length; i++) {
+    str2 += "<tr>";
+    str2 += "<th style=\"width:120px\"> Documento " + String(i + 1) + "</th>";
+    
+    for (let j = 0; j < TFIDF[0].length; j++) {
+      if (i !== j) {
+        str2 += "<th style=\"font-weight:normal; width:120px\">" + adjustedCosine(TFIDF[0][i], TFIDF[0][j]) + "</th>";
+
+      } else {
+        str2 += "<th style=\"font-weight:normal; width:120px\">1</th>";
+      }
+    }
+    str2 += "</tr>";
+  }
+
+  str2 += "</table>";
+  document.getElementById("output2").innerHTML += str2;
 
 
 }
@@ -176,36 +199,59 @@ function tfIdf(tf, idf) {
 
 function adjustedCosine(a, b) {
   let s = [];
-  for (let i = 0; i < a.length; i++) {
+  for (let i = 0; i < a.length; i++) { //Guardar lo términos comunes entro los dos documnentos
     for (let j = 0; j < b.length; j++) {
-      if (a[0][i][0] == b[0][j][0]) {
-        s.push(a[0][i][0]);
+      if (a[i][0] == b[j][0]) {
+        s.push(a[i][0]);
         break;
       }
     }
   }
-  
+
   let acc1 = 0;
   let acc2 = 0;
   let acc3 = 0;
 
   for (let i = 0; i < s.length; i++) {
-    acc1 += (a[s[i]] - average(a)) * (b[s[i]] - average(b));
-    acc2 += Math.pow(a[s[i]], 2);
-    acc3 += Math.pow(b[s[i]], 2);
-  }
+    let aux1 = 0;
+    let aux2 = 0;
 
+    for (j = 0; j < a.length; j++) {
+      if (s[i] == a[j][0]) {
+        aux1 = a[j][1];
+        break;
+      }
+    }
+
+    for (j = 0; j < b.length; j++) {
+      if (s[i] == b[j][0]) {
+        aux2 = b[j][1];
+        break;
+      }
+    }
+
+    acc1 += (aux1 - average(a)) * (aux2 - average(b));
+    acc2 += Math.pow(aux1 - average(a), 2);
+    acc3 += Math.pow(aux2 - average(b), 2);
+
+  }
+ 
   acc2 = Math.sqrt(acc2);
   acc3 = Math.sqrt(acc3);
 
-  return acc1 / (acc2 * acc3);
+  if (acc2 == 0 || acc3 == 0) {
+    return 0;
+  } else {
+    return acc1 / (acc2 * acc3);
+  }
+  
 }
 
 function average(a) {
   let acc = 0;
   let len = 0;
   for (let i = 0; i < a.length; i++) {
-      acc += Number(a[i]);
+      acc += a[i][1];
       len++;
   }
   if (len !== 0) {
